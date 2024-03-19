@@ -1,0 +1,29 @@
+name: Clone website
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  clone:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup time zone
+        uses: zcong1993/setup-timezone@master
+        with:
+          timezone: Asia/Taipei
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Run wget
+        run: wget --config=wgetrc https://homepage.ntu.edu.tw/~f08943072/
+        continue-on-error: true
+      - name: Get current time
+        id: get-time
+        run: echo "now="$(date -Iseconds)"" >> "${GITHUB_OUTPUT}"
+      - name: Commit to repository
+        id: auto-commit
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: ${{ format('[{0}] Clone by Actions', steps.get-time.outputs.now) }}
