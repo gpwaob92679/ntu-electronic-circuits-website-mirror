@@ -1,8 +1,9 @@
 name: Clone website
 
 on:
+  schedule:
+    - cron: "0 20 * * 3"
   workflow_dispatch:
-
 
 jobs:
   clone:
